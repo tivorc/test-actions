@@ -1,0 +1,20 @@
+name: 'monago'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello world
+        run: |
+          echo "Hello world"
+          echo "event name: ${{ github.event_name }}"
+          echo "event action: ${{ github.event.action }}"
