@@ -29,6 +29,8 @@ jobs:
           action: "upload"
           app_location: "/"
           output_location: "/dist"
+        env:
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
