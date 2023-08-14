@@ -18,11 +18,12 @@ jobs:
       - name: Get Environment
         run: |
           echo "Environment: ${{ github.event_name == 'push' && 'PRO' || 'DEV' }}"
+          echo "Branch: ${{ github.ref }}"
   build_and_deploy_job:
     needs: get_environment
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'push' && 'PRO' || 'DEV' }}
+    environment: 'PRO'
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v2
