@@ -18,8 +18,14 @@ jobs:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+        # event_name == 'pull_request' && base_ref == 'main' => PRO
+        # event_name == 'push' && ref_name == 'main' => PRO
         run: |
-          echo "$GITHUB_CONTEXT"
+          echo "ref        : ${{github.ref}}"
+          echo "head_ref   : ${{github.head_ref}}"
+          echo "base_ref   : ${{github.base_ref}}"
+          echo "event_name : ${{github.event_name}}"
+          echo "ref_name   : ${{github.ref_name}}"
 
   build_and_deploy_job:
     if: false && github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
