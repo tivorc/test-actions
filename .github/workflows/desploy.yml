@@ -4,29 +4,46 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
 
 jobs:
+  get_environment:
+    runs-on: ubuntu-latest
+    name: Get Environment
+    outputs:
+      output: ${{ steps.step1.outputs.test }}
+    steps:
+      - id: step1
+        run: echo "test=${{ github.ref == 'refs/heads/develop' && 'DEV' || 'PRO' }}" >> "$GITHUB_OUTPUT"
   build_and_deploy_job:
+    needs: get_environment
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    environment: ${{needs.get_environment.outputs.output}}
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - name: Env
+        run: |
+          echo "${{needs.get_environment.outputs.output}}"
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
+          production_branch: "main"
           azure_static_web_apps_api_token: ${{ secrets.AZURE_PUBLISH_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/"
           output_location: "/dist"
+        env:
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
