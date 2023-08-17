@@ -1,0 +1,40 @@
+name: Custom execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: 'API URL'
+        required: true
+        type: string
+      branch:
+        description: 'Branch'
+        required: true
+        default: 'main'
+        type: string
+
+jobs:
+  build_and_deploy_job:
+    runs-on: ubuntu-latest
+    environment: DEV
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          ref: ${{ github.event.inputs.branch }}
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          production_branch: "main"
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_PUBLISH_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/"
+          output_location: "/dist"
+          deployment_environment: "dev"
+        env:
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          VITE_APP_API_HTTP_URL: ${{ github.event.inputs.api_url }}
+          VITE_APP_API_WS_URL: ${{ github.event.inputs.api_url }}
