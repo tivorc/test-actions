@@ -25,7 +25,7 @@ jobs:
         id: get_wss
         run: |
           url=$(echo "${{ github.event.inputs.api_url }}" | sed 's~http[s]*://~wss://~g')
-          echo "VALUE=$url" >> $$GITHUB_OUTPUT
+          echo "VALUE=$url" >> $GITHUB_OUTPUT
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
