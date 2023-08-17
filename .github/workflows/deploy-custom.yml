@@ -21,6 +21,11 @@ jobs:
         with:
           submodules: true
           ref: ${{ github.event.inputs.branch }}
+      - name: Get wss url
+        id: get_wss
+        run: |
+          url=$(echo "${{ github.event.inputs.api_url }}" | sed 's~http[s]*://~wss://~g')
+          echo "VALUE=$url" >> $GITHUB_OUTPUT
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -34,4 +39,4 @@ jobs:
         env:
           VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           VITE_APP_API_HTTP_URL: ${{ github.event.inputs.api_url }}
-          VITE_APP_API_WS_URL: ${{ github.event.inputs.api_url }}
+          VITE_APP_API_WS_URL: ${{ steps.get_wss.outputs.VALUE }}
