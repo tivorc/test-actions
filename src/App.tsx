@@ -17,6 +17,8 @@ function App() {
         </a>
       </div>
       <h1>{ import.meta.env.VITE_APP_TITLE } 🤖</h1>
+      <p>{ import.meta.env.VITE_APP_API_HTTP_URL }</p>
+      <p>{ import.meta.env.VITE_APP_API_WS_URL }</p>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
