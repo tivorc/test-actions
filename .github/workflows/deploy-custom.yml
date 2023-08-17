@@ -6,10 +6,12 @@ on:
       api_url:
         description: 'API URL'
         required: true
+        type: string
       branch:
         description: 'Branch'
         required: true
         default: 'main'
+        type: string
 
 jobs:
   build_and_deploy_job:
