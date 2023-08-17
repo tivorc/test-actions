@@ -1,4 +1,4 @@
-name: Custom Azure Static Web Apps CI/CD
+name: Custom execution
 
 on:
   workflow_dispatch:
@@ -33,7 +33,7 @@ jobs:
           action: "upload"
           app_location: "/"
           output_location: "/dist"
-          environment_name: "dev"
+          deployment_environment: "dev"
         env:
           VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           VITE_APP_API_HTTP_URL: ${{ github.event.inputs.api_url }}
