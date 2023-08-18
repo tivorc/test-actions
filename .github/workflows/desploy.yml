@@ -12,6 +12,16 @@ on:
       - develop
 
 jobs:
+  event_info:
+    runs-on: ubuntu-lastest
+    name: Event info
+    steps:
+      - name: command
+        run: |
+          echo "event_name: ${{ github.event_name }}"
+          echo "base_ref: ${{ github.base_ref }}"
+          echo "event_action: ${{ github.event.action }}"
+
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
